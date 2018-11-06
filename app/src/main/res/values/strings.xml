@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">FlightSchedule</string>
+
+    <string name="initializing">Initializing</string>
+    <string name="loading">Loading</string>
+    <string name="multiple_permissions_needed">Multiple Permissions Needed</string>
+    <string name="grant">Grant</string>
+    <string name="exit">Exit</string>
+    <string name="permissions_request_message">This app needs access to Camera and Location permissions to run smoothly. Please grant them or exit app.</string>
+    <string name="enable_in_settings">Enable in Settings</string>
+    <string name="go_to_permissions_to_grant_them">Go to Permissions to grant all permissions.</string>
+    <string name="unable_to_get_permissions">Unable to get permissions</string>
+    <string name="no_internet_msg">No internet Connection Please try again later</string>
+    <string name="where_to">Where to?</string>
+
 </resources>
