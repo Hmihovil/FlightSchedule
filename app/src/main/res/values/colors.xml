@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0E1D33</color>
+    <color name="colorPrimaryDark">#0E1D33</color>
+    <color name="colorAccent">#9B6C1B</color>
+    <color name="colorAccent_trans_50">#809B6C1B</color>
+    <color name="colorAccentDark">#996600</color>
+    <color name="colorAccentLight">#f7efe6</color>
+    <color name="colorPrimaryLight">#bdcadd</color>
+
+    //transparency
+    <!--100% — FF-->
+    <!--95% — F2-->
+    <!--90% — E6-->
+    <!--85% — D9-->
+    <!--80% — CC-->
+    <!--75% — BF-->
+    <!--70% — B3-->
+    <!--65% — A6-->
+    <!--60% — 99-->
+    <!--55% — 8C-->
+    <!--50% — 80-->
+    <!--45% — 73-->
+    <!--40% — 66-->
+    <!--35% — 59-->
+    <!--30% — 4D-->
+    <!--25% — 40-->
+    <!--20% — 33-->
+    <!--15% — 26-->
+    <!--10% — 1A-->
+    <!--5% — 0D-->
+    <!--0% — 00-->
+
+    <color name="trans_black_05">#0d000000</color>
+    <color name="trans_black_10">#1a000000</color>
+    <color name="trans_black_15">#26000000</color>
+    <color name="trans_black_20">#33000000</color>
+    <color name="trans_black_25">#40000000</color>
+    <color name="trans_black_30">#4D000000</color>
+    <color name="trans_black_35">#59000000</color>
+    <color name="trans_black_40">#66000000</color>
+    <color name="trans_black_45">#73000000</color>
+    <color name="trans_black_50">#80000000</color>
+    <color name="trans_black_55">#8c000000</color>
+    <color name="trans_black_60">#99000000</color>
+    <color name="trans_black_65">#a6000000</color>
+    <color name="trans_black_70">#b3000000</color>
+    <color name="trans_black_75">#bf000000</color>
+    <color name="trans_black_80">#cc000000</color>
+    <color name="trans_black_85">#d9000000</color>
+    <color name="trans_black_90">#e6000000</color>
+    <color name="trans_black_95">#f2000000</color>
+    <color name="trans_white_05">#0dffffff</color>
+    <color name="trans_white_10">#1affffff</color>
+    <color name="trans_white_15">#26ffffff</color>
+    <color name="trans_white_20">#33ffffff</color>
+    <color name="trans_white_25">#40ffffff</color>
+    <color name="trans_white_30">#4Dffffff</color>
+    <color name="trans_white_35">#59ffffff</color>
+    <color name="trans_white_40">#66ffffff</color>
+    <color name="trans_white_45">#73ffffff</color>
+    <color name="trans_white_50">#80ffffff</color>
+    <color name="trans_white_55">#8cffffff</color>
+    <color name="trans_white_60">#99ffffff</color>
+    <color name="trans_white_65">#a6ffffff</color>
+    <color name="trans_white_70">#b3ffffff</color>
+    <color name="trans_white_75">#bfffffff</color>
+    <color name="trans_white_80">#ccffffff</color>
+    <color name="trans_white_85">#d9ffffff</color>
+    <color name="trans_white_90">#e6ffffff</color>
+    <color name="trans_white_95">#f2ffffff</color>
+    <color name="dddddd_trans_70">#b3dddddd</color>
+    <color name="dddddd_trans_90">#e6dddddd</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="yellow">#F6E200</color>
+    <color name="red">#F44336</color>
+    <color name="facebook">#425F9C</color>
+    <color name="aaaaaa">#aaaaaa</color>
+    <color name="bbbbbb">#bbbbbb</color>
+    <color name="cccccc">#cccccc</color>
+    <color name="dddddd">#dddddd</color>
+    <color name="eeeeee">#eeeeee</color>
+    <color name="d8d8d8">#d8d8d8</color>
+    <color name="f2f2f2">#f2f2f2</color>
+    <color name="f5f5f5">#f5f5f5</color>
+    <color name="f9f9f9">#f9f9f9</color>
+    <color name="ones">#111111</color>
+    <color name="twos">#222222</color>
+    <color name="threes">#333333</color>
+    <color name="fours">#444444</color>
+    <color name="fives">#555555</color>
+    <color name="sixs">#666666</color>
+    <color name="sevens">#777777</color>
+    <color name="eights">#888888</color>
+    <color name="nines">#999999</color>
+    <color name="color_1">#161A23</color>
+    <color name="color_2">#F2C34A</color>
+    <color name="color_3">#4F4F4F</color>
+    <color name="color_4">#6FCF97</color>
+    <color name="color_5">#828282</color>
+    <color name="color_6">#EB577B</color>
+    <color name="color_7">#596174</color>
+    <color name="color_8">#293C58</color>
+    <color name="color_9">#425B80</color>
+    <color name="color_10">#3B4255</color>
+    <color name="color_11">#DBECF8</color>
+    <color name="color_12">#4f4f4f</color>
+    <color name="play_bg">#CCE14C99</color>
+    <color name="feeds_action_txt">#0D2A50</color>
+    <color name="circle_pin_code">#ADA389</color>
+    <color name="blue">#439AE9</color>
+    <color name="greyish">#aaa8a8</color>
+    <color name="mine_shaft">#303030</color>
+    <color name="color_2_trans_10">#1a4F67D1</color>
+
+</resources>
