@@ -11,6 +11,13 @@
     <string name="go_to_permissions_to_grant_them">Go to Permissions to grant all permissions.</string>
     <string name="unable_to_get_permissions">Unable to get permissions</string>
     <string name="no_internet_msg">No internet Connection Please try again later</string>
-    <string name="where_to">Where to?</string>
+    <string name="from">From?</string>
+    <string name="to">To?</string>
+    <string name="continue_">Continue</string>
+    <string name="select_start_location">Please select start location</string>
+    <string name="select_end_location">Please select end location</string>
+    <string name="no_results_found">No results found</string>
+    <string name="no_flights_available">No flights available</string>
+    <string name="searching_for_available_flights">Searching for available flights...</string>
 
 </resources>

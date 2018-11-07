@@ -7,6 +7,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.support.v7.app.AppCompatActivity
+import android.text.format.DateFormat
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -15,11 +16,33 @@ import io.codetail.animation.ViewAnimationUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HelperFunctions{
+class HelperFunctions {
 
     companion object {
 
         private val TAG = HelperFunctions::class.java.simpleName
+
+        fun generateGETUrl(baseUrl: String, params: HashMap<String, String>): String {
+            var url = "$baseUrl?"
+            if (params.size > 0) {
+                for (parameter in params) {
+                    url += parameter.key + "=" + parameter.value + "&"
+                }
+            }
+            Log.d(TAG, "GET Url with Params: ${url.substring(0, url.length - 1)}")
+
+            return url.substring(0, url.length - 1)
+        }
+
+        fun getCurrentTimeStamp(withTime: Boolean): String {
+            return if (withTime) {
+                Log.d(TAG, "Current Time Stamp: ${DateFormat.format("yyyy-MM-dd HH:mm:ss", java.util.Date()).toString()}")
+                DateFormat.format("yyyy-MM-dd HH:mm:ss", java.util.Date()).toString()
+            } else {
+                Log.d(TAG, "Current Time Stamp: ${DateFormat.format("yyyy-MM-dd", java.util.Date()).toString()}")
+                DateFormat.format("yyyy-MM-dd", java.util.Date()).toString()
+            }
+        }
 
         fun hasNetworkConnection(context: Context): Boolean {
             var hasWifiConnection = false

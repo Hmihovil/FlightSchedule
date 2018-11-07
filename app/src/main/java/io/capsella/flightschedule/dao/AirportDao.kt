@@ -1,19 +1,24 @@
-package io.capsella.almasii.imagefeeds.dao
+package io.capsella.flightschedule.dao
 
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import io.capsella.almasii.imagefeeds.database.Database
-import io.capsella.almasii.imagefeeds.model.Image
-import io.capsella.almasii.imagefeeds.util.Constants
+import io.capsella.flightschedule.storage.Database
+import io.capsella.flightschedule.model.Airport
+import io.capsella.flightschedule.util.Constants
+import io.capsella.flightschedule.util.HelperFunctions
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 
-class ImageDao {
+class AirportDao {
 
-    private val TAG = ImageDao::class.java.simpleName
+    private val TAG = AirportDao::class.java.simpleName
     private var context: Context
     private var database: Database? = null
 
@@ -22,58 +27,80 @@ class ImageDao {
         this.database = Database(context)
     }
 
-    fun fetchData() {
+    fun fetchAirports(airportCode: String) {
 
-        Log.d(TAG, "Url - All Photos: ${Constants.URL_ALL_PHOTOS}")
+        "https://api.lufthansa.com/v1/references/airports/?limit=50&offset=0&LHoperated=false"
+        val url = "${Constants.URL_AIRPORTS}$airportCode"
+        Log.d(TAG, "Url - Get Airports: $url")
 
-        val request = JsonArrayRequest(Request.Method.GET, Constants.URL_ALL_PHOTOS, null,
-                Response.Listener { response ->
+        val limit = "100"
+        val offset = "0"
+        val lhOperated = "0"
+        val params: HashMap<String, String> = HashMap()
+        params["limit"] = limit
+        params["offset"] = offset
+        params["LHoperated"] = lhOperated
 
-                    try {
-                        Log.d(TAG, "All Photos JSON \n----------$response")
+        val request = object : StringRequest(Request.Method.GET, HelperFunctions.generateGETUrl(url, params), Response.Listener { response ->
 
-                        database!!.open().clear()
-                        database!!.saveImages(response)
-                        database!!.close()
+            try {
+                val jsonObject = JSONObject(response.toString())
+                Log.d(TAG, "Airports Return JSON \n----------$jsonObject")
 
-                        context.sendBroadcast(Intent(Constants.Broadcast_DATA_FETCH_COMPLETED))
+                database!!.open().clear(Database.TABLE_AIRPORTS)
+                database!!.open().saveAirports(jsonObject.getJSONObject("AirportResource").getJSONObject("Airports").getJSONArray("Airport"))
+                database!!.close()
 
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                },
-                Response.ErrorListener { error ->
-                    error.printStackTrace()
-                }
-        )
+                context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_AIRPORTS_SYNC))
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+        }, Response.ErrorListener { error ->
+            error.printStackTrace()
+        }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                headers["Authorization"] = Constants.AUTHORIZATION
+                return headers
+            }
+        }
 
         Volley.newRequestQueue(context).add(request)
     }
 
-    fun getImages(): MutableList<Image>? {
+    fun getAirports(airportCode: String?): MutableList<Airport>? {
 
-        val images: MutableList<Image> = ArrayList()
+        val airports: MutableList<Airport> = ArrayList()
 
         try {
-            val orderBy = "${Database.COLUMN_CREATED_AT_MILLIS} DESC"
-            val cursor = database!!.open().getSQLiteDatabase().query(Database.TABLE_IMAGES, null, null, null, null, null, orderBy)
-            Log.d(TAG, "Images Count: ${cursor.count}")
+//            val cursor = ourDatabase.query(REFERENCE_SURVEYS_RESPONSES_TABLE, null, SURVEY_ID + " = " + surveyId + " AND " + REFERENCE_RESPONSE_VALUE_TITLE + " LIKE '%" + filterText + "%'" + " AND " + COMPLETED_REFERENCE + " = 0", null, null, null, RESPONDENT_ID_LABEL + " ASC")
+            val where = "${Database.COLUMN_AIRPORT_CODE} LIKE '$airportCode%'"
+            Log.d(TAG, "Get Airports Where: $where")
+            val cursor = database!!.open().getSQLiteDatabase().query(Database.TABLE_AIRPORTS, null, where, null, null, null, null)
+            Log.d(TAG, "Airports Count: ${cursor.count}")
 
             while (cursor.moveToNext()) {
-                val image = Image(cursor.getInt(cursor.getColumnIndex(Database.COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_URL)),
-                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_DOWNLOAD_TOKEN)),
+                val airport = Airport(cursor.getInt(cursor.getColumnIndex(Database.COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_AIRPORT_CODE)),
                         cursor.getString(cursor.getColumnIndex(Database.COLUMN_NAME)),
-                        cursor.getLong(cursor.getColumnIndex(Database.COLUMN_CREATED_AT_MILLIS)))
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_LATITUDE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_LONGITUDE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_CITY_CODE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_COUNTRY_CODE)))
 
-                images.add(image)
-                Log.d(TAG, "\nCreated At Millis: ${image.createdAtMillis}")
+                airports.add(airport)
             }
-            Log.d(TAG, "Images Count: ${images.size}")
+            Log.d(TAG, "Airports Count: ${airports.size}")
 
             cursor.close()
             database!!.close()
-            return images
+            return airports
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -82,18 +109,35 @@ class ImageDao {
         }
     }
 
-    fun getImagesCount(): Int {
-        return try {
-            val cursor = database!!.open().getSQLiteDatabase().query(Database.TABLE_IMAGES, null, null, null, null, null, null)
-            val count = cursor.count
-            cursor.close()
-            database!!.close()
+    fun getAirport(airportCode: String): Airport? {
 
-            count
+        try {
+            val where = "${Database.COLUMN_AIRPORT_CODE} = '$airportCode'"
+            Log.d(TAG, "Get Airport Where: $where")
+            val cursor = database!!.open().getSQLiteDatabase().query(Database.TABLE_AIRPORTS, null, where, null, null, null, null)
+
+            if (cursor.count > 0) {
+                cursor.moveToFirst()
+                val airport = Airport(cursor.getInt(cursor.getColumnIndex(Database.COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_AIRPORT_CODE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_LATITUDE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_LONGITUDE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_CITY_CODE)),
+                        cursor.getString(cursor.getColumnIndex(Database.COLUMN_COUNTRY_CODE)))
+
+                cursor.close()
+                database!!.close()
+                return airport
+            } else {
+                cursor.close()
+                database!!.close()
+                return null
+            }
         } catch (e: Exception) {
-            database!!.close()
             e.printStackTrace()
-            0
+            database!!.close()
+            return null
         }
     }
 }

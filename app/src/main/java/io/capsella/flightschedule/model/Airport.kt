@@ -1,10 +1,18 @@
-package com.bloomimpact.bancus.features.authentication.model
+package io.capsella.flightschedule.model
 
-class Countries(id: Int, checksum: String, data: String) {
+class Airport(id: Int, airportCode: String, name: String, latitude: String, longitude: String, cityCode: String, countryCode: String) {
 
     var id: Int = id
 
-    var checksum: String = checksum
+    var airportCode: String = airportCode
 
-    var data: String = data
+    var name: String = name
+
+    var latitude: String = latitude
+
+    var longitude: String = longitude
+
+    var cityCode: String = cityCode
+
+    var countryCode: String = countryCode
 }

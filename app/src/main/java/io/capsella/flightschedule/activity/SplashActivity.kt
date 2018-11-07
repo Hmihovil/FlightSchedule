@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import io.capsella.flightschedule.R
 import io.capsella.flightschedule.dao.AirportDao
+import io.capsella.flightschedule.dao.CountryDao
 import io.capsella.flightschedule.util.Constants
 import io.capsella.flightschedule.util.HelperFunctions
 
@@ -41,7 +42,7 @@ class SplashActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION)
 
     private var sentToSettings = false
-    private lateinit var completeAppDataSyncBroadcastReceiver: CompleteAppDataSyncBroadcastReceiver
+    private lateinit var completeAirportsSyncBroadcastReceiver: CompleteAirportsSyncBroadcastReceiver
     private lateinit var prefs: SharedPreferences
     private lateinit var edit: SharedPreferences.Editor
 
@@ -51,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         edit = prefs.edit()
-        completeAppDataSyncBroadcastReceiver = CompleteAppDataSyncBroadcastReceiver()
+        completeAirportsSyncBroadcastReceiver = CompleteAirportsSyncBroadcastReceiver()
 
         proximaNovaBold = Typeface.createFromAsset(assets, "Proxima Nova Bold.ttf")
         proximaNovaSemiBold = Typeface.createFromAsset(assets, "Proxima Nova SemiBold.ttf")
@@ -67,12 +68,12 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        registerReceiver(completeAppDataSyncBroadcastReceiver, IntentFilter(Constants.Broadcast_COMPLETE_APP_DATA_SYNC))
+        registerReceiver(completeAirportsSyncBroadcastReceiver, IntentFilter(Constants.Broadcast_COMPLETE_AIRPORTS_SYNC))
     }
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(completeAppDataSyncBroadcastReceiver)
+        unregisterReceiver(completeAirportsSyncBroadcastReceiver)
     }
 
     override fun onPostResume() {
@@ -218,13 +219,13 @@ class SplashActivity : AppCompatActivity() {
 
     private fun proceed() {
         if (HelperFunctions.hasNetworkConnection(this)) {
-            AirportDao(this).fetchAirports("")
+            CountryDao(this).fetchCountries()
         } else {
             Toast.makeText(this, resources.getText(R.string.no_internet_msg), Toast.LENGTH_SHORT).show()
         }
     }
 
-    inner class CompleteAppDataSyncBroadcastReceiver : BroadcastReceiver() {
+    inner class CompleteAirportsSyncBroadcastReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
 

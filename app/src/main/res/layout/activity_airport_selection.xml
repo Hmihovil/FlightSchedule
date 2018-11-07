@@ -29,7 +29,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:padding="18dp"
+                android:padding="15dp"
+                android:src="@drawable/arrow_left"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,10 +77,11 @@
                         android:padding="12dp"
                         android:src="@drawable/marker_primary" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/origin"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:background="@null"
                         android:gravity="center_vertical"
                         android:hint="@string/from"
                         android:textColor="@color/colorAccent"
@@ -113,10 +115,11 @@
                         android:padding="12dp"
                         android:src="@drawable/marker_primary" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/dest"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:background="@null"
                         android:gravity="center_vertical"
                         android:hint="@string/to"
                         android:textColor="@color/colorAccent"
@@ -134,50 +137,63 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
-            android:id="@+id/no_flights_available_img"
-            android:layout_width="90dp"
+            android:id="@+id/no_results_img"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/no_flights_available"
-            app:layout_constraintBottom_toTopOf="@+id/no_flights_available_txt"
+            android:src="@drawable/search_dddddd"
+            app:layout_constraintBottom_toTopOf="@+id/no_results_txt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/no_flights_available_txt"
+            android:id="@+id/no_results_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="?attr/actionBarSize"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="@string/no_flights_available"
+            android:text="@string/no_results_found"
             android:textColor="@color/dddddd"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/no_flights_available_img" />
+            app:layout_constraintTop_toBottomOf="@+id/no_results_img" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="?attr/actionBarSize"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/continue_"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:background="@color/colorPrimary"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/continue_"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>
