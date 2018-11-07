@@ -19,5 +19,8 @@
     <string name="no_results_found">No results found</string>
     <string name="no_flights_available">No flights available</string>
     <string name="searching_for_available_flights">Searching for available flights...</string>
+    <string name="flight_no">FN# %s</string>
+    <string name="origin_location_unavailable">Departure airport location unavailable</string>
+    <string name="dest_location_unavailable">Arrival airport location unavailable</string>
 
 </resources>

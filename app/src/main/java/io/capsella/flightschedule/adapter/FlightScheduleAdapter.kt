@@ -33,6 +33,7 @@ class FlightScheduleAdapter(var context: Context, var itemArrayList: MutableList
         var mainLayout: ConstraintLayout = row.findViewById(R.id.main_layout)
         var originTxt: TextView = row.findViewById(R.id.origin)
         var destinationTxt: TextView = row.findViewById(R.id.destination)
+        var flightNumber: TextView = row.findViewById(R.id.flight_no)
     }
 
     override fun getItemCount(): Int {
@@ -55,6 +56,7 @@ class FlightScheduleAdapter(var context: Context, var itemArrayList: MutableList
 
         itemViewHolder.originTxt.text = if(AirportDao(context).getAirport(flightSchedule.airportCodeDeparture) == null) flightSchedule.airportCodeDeparture else AirportDao(context).getAirport(flightSchedule.airportCodeDeparture)!!.name
         itemViewHolder.destinationTxt.text = if(AirportDao(context).getAirport(flightSchedule.airportCodeArrival) == null) flightSchedule.airportCodeArrival else AirportDao(context).getAirport(flightSchedule.airportCodeArrival)!!.name
+        itemViewHolder.flightNumber.text = context.resources.getString(R.string.flight_no, flightSchedule.flightNumber.toString())
 
         itemViewHolder.originTxt.typeface = proximaNovaSemiBold
         itemViewHolder.destinationTxt.typeface = proximaNovaRegular
@@ -62,8 +64,7 @@ class FlightScheduleAdapter(var context: Context, var itemArrayList: MutableList
         itemViewHolder.mainLayout.setOnClickListener {
             val activity = context as AppCompatActivity
             activity.startActivity(Intent(context, MapActivity::class.java)
-                    .putExtra(Constants.ORIGIN, flightSchedule.airportCodeDeparture)
-                    .putExtra(Constants.DESTINATION, flightSchedule.airportCodeArrival))
+                    .putExtra(Constants.ID, flightSchedule.id))
             activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
     }

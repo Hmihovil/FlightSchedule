@@ -214,11 +214,19 @@ class AirportSelectionActivity : AppCompatActivity(), View.OnClickListener {
 
             if (progressDialog.isShowing) progressDialog.dismiss()
 
-            val returnIntent = Intent()
-            returnIntent.putExtra(Constants.ORIGIN, origin)
-            returnIntent.putExtra(Constants.DESTINATION, destination)
-            setResult(Activity.RESULT_OK, returnIntent)
-            finish()
+            val state = intent.getStringExtra(Constants.STATE)
+            when (state) {
+                Constants.STATE_ERROR -> {
+                    Toast.makeText(this@AirportSelectionActivity, resources.getString(R.string.no_flights_available), Toast.LENGTH_SHORT).show()
+                }
+                Constants.STATE_SUCCESS -> {
+                    val returnIntent = Intent()
+                    returnIntent.putExtra(Constants.ORIGIN, origin)
+                    returnIntent.putExtra(Constants.DESTINATION, destination)
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finish()
+                }
+            }
         }
     }
 }

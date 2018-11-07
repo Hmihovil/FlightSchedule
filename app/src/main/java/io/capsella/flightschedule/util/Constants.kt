@@ -5,9 +5,13 @@ class Constants {
 
         // General
         const val AUTHORIZATION = "Bearer cny7dfy4ww8cbregkfnbnctw"
+        const val ID = "id"
         const val ORIGIN = "origin"
         const val DESTINATION = "destination"
         const val AIRPORT_CODE = "airport_code"
+        const val STATE = "state"
+        const val STATE_SUCCESS = "success"
+        const val STATE_ERROR = "error"
 
         // Urls
         private const val URL_SERVER = "https://api.lufthansa.com/v1/"

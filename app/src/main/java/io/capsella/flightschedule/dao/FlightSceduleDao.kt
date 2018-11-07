@@ -18,7 +18,6 @@ import java.io.IOException
 import com.android.volley.DefaultRetryPolicy
 
 
-
 class FlightSceduleDao {
 
     private val TAG = FlightSceduleDao::class.java.simpleName
@@ -55,15 +54,18 @@ class FlightSceduleDao {
                 database!!.open().saveFlightSchedules(jsonObject.getJSONObject("ScheduleResource").getJSONArray("Schedule"))
                 database!!.close()
 
-                context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_FLIGHT_SCHEDULES_SYNC))
+                context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_FLIGHT_SCHEDULES_SYNC).putExtra(Constants.STATE, Constants.STATE_SUCCESS))
 
             } catch (e: IOException) {
+                context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_FLIGHT_SCHEDULES_SYNC).putExtra(Constants.STATE, Constants.STATE_ERROR))
                 e.printStackTrace()
             } catch (e: JSONException) {
+                context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_FLIGHT_SCHEDULES_SYNC).putExtra(Constants.STATE, Constants.STATE_ERROR))
                 e.printStackTrace()
             }
 
         }, Response.ErrorListener { error ->
+            context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_FLIGHT_SCHEDULES_SYNC).putExtra(Constants.STATE, Constants.STATE_ERROR))
             error.printStackTrace()
         }) {
             @Throws(AuthFailureError::class)
@@ -115,10 +117,10 @@ class FlightSceduleDao {
         }
     }
 
-    fun getFlightSchedule(flightNumber: Int): FlightSchedule? {
+    fun getFlightSchedule(id: Int): FlightSchedule? {
 
         try {
-            val where = "${Database.COLUMN_FLIGHT_NUMBER} = $flightNumber"
+            val where = "${Database.COLUMN_ID} = $id"
             Log.d(TAG, "Get Flight Schedule Where: $where")
             val cursor = database!!.open().getSQLiteDatabase().query(Database.TABLE_FLIGHT_SCHEDULES, null, where, null, null, null, null)
 
