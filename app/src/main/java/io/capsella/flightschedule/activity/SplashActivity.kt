@@ -37,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
 
     private var permissionsRequired = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_STATE,
+//            Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -107,8 +107,7 @@ class SplashActivity : AppCompatActivity() {
             } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[0])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[1])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[2])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[3])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[4])) {
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[3])) {
 
                 val builder = AlertDialog.Builder(this)
                 builder.setCancelable(false)
@@ -162,13 +161,11 @@ class SplashActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(this, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, permissionsRequired[1]) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, permissionsRequired[2]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, permissionsRequired[3]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, permissionsRequired[4]) != PackageManager.PERMISSION_GRANTED) {
+                || ActivityCompat.checkSelfPermission(this, permissionsRequired[3]) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[0])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[1])
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[2])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[3])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[4])) {
+                    || ActivityCompat.shouldShowRequestPermissionRationale(this, permissionsRequired[3])) {
                 //Show Information about why you need the permission
                 val builder = AlertDialog.Builder(this)
                 builder.setCancelable(false)

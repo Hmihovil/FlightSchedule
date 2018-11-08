@@ -166,10 +166,10 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
         flightSchedule = FlightSceduleDao(this).getFlightSchedule(intent.getIntExtra(Constants.ID, 0))
 
         departureFlightNo.text = resources.getString(R.string.flight_no, flightSchedule!!.flightNumber)
-        departureAirport.text = AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.name
+        departureAirport.text = if(AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture) == null) flightSchedule!!.airportCodeDeparture else AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.name
         departureTime.text = flightSchedule!!.localTimeDeparture
         arrivalFlightNo.text = resources.getString(R.string.flight_no, flightSchedule!!.flightNumber)
-        arrivalAirport.text = AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.name
+        arrivalAirport.text = if(AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival) == null) flightSchedule!!.airportCodeArrival else AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.name
         arrivalTime.text = flightSchedule!!.localTimeArrival
     }
 

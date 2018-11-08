@@ -135,9 +135,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SwipeRefreshLayo
         originAirportCode = PrefsManager(this).origin
         destinationAirportCode = PrefsManager(this).destination
 
-        if(originAirportCode.isNotEmpty() && destinationAirportCode.isNotEmpty()) {
-            originTxt.text = AirportDao(this).getAirport(originAirportCode)!!.name
-            destTxt.text = AirportDao(this).getAirport(destinationAirportCode)!!.name
+        if (originAirportCode.isNotEmpty() && destinationAirportCode.isNotEmpty()) {
+            originTxt.text = if (AirportDao(this).getAirport(originAirportCode) == null) originAirportCode else AirportDao(this).getAirport(originAirportCode)!!.name
+            destTxt.text = if (AirportDao(this).getAirport(destinationAirportCode) == null) destinationAirportCode else AirportDao(this).getAirport(destinationAirportCode)!!.name
         }
 
         flightSchedules = FlightSceduleDao(this).getFlightSchedules()
