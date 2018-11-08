@@ -287,7 +287,7 @@ class Database {
         }
     }
 
-    private fun insertAirport(jsonObject: JSONObject): Boolean {
+    fun insertAirport(jsonObject: JSONObject): Boolean {
 
         return try {
 

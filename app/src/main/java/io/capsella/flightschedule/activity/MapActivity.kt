@@ -1,6 +1,11 @@
 package io.capsella.flightschedule.activity
 
 import android.app.Activity
+import android.app.ProgressDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.app.AppCompatActivity
@@ -24,6 +29,7 @@ import io.capsella.flightschedule.dao.FlightSceduleDao
 import io.capsella.flightschedule.model.FlightSchedule
 import io.capsella.flightschedule.util.Constants
 import io.capsella.flightschedule.dao.CityDao
+import io.capsella.flightschedule.model.Airport
 import io.capsella.flightschedule.model.City
 import io.capsella.flightschedule.util.HelperFunctions
 
@@ -50,6 +56,8 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
     private lateinit var proximaNovaSemiBold: Typeface
     private lateinit var proximaNovaRegular: Typeface
 
+    private lateinit var completeAirportsSyncBroadcastReceiver: CompleteAirportsSyncBroadcastReceiver
+    private lateinit var progressDialog: ProgressDialog
     private var googleMap: GoogleMap? = null
     private var latLngBounds: LatLngBounds? = null
     private var flightSchedule: FlightSchedule? = null
@@ -62,13 +70,39 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
         proximaNovaSemiBold = Typeface.createFromAsset(assets, "Proxima Nova SemiBold.ttf")
         proximaNovaRegular = Typeface.createFromAsset(assets, "Proxima Nova Regular.ttf")
 
+        completeAirportsSyncBroadcastReceiver = CompleteAirportsSyncBroadcastReceiver()
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage(resources.getString(R.string.initializing_please_wait))
+        progressDialog.setCancelable(false)
+
+        flightSchedule = FlightSceduleDao(this).getFlightSchedule(intent.getIntExtra(Constants.ID, 0))
+
         initViews()
-        setData()
+
+        if (AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture) == null) {
+            progressDialog.show()
+            AirportDao(this).fetchAirports(flightSchedule!!.airportCodeDeparture)
+        } else if (AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival) == null) {
+            progressDialog.show()
+            AirportDao(this).fetchAirports(flightSchedule!!.airportCodeArrival)
+        } else {
+            setData()
+        }
     }
 
     private fun <T : View> Activity.bind(@IdRes res: Int): T {
         @Suppress("UNCHECKED_CAST")
         return findViewById<T>(res)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(completeAirportsSyncBroadcastReceiver, IntentFilter(Constants.Broadcast_COMPLETE_AIRPORTS_SYNC))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(completeAirportsSyncBroadcastReceiver)
     }
 
     override fun onClick(v: View?) {
@@ -163,13 +197,11 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
     }
 
     private fun setData() {
-        flightSchedule = FlightSceduleDao(this).getFlightSchedule(intent.getIntExtra(Constants.ID, 0))
-
         departureFlightNo.text = resources.getString(R.string.flight_no, flightSchedule!!.flightNumber)
-        departureAirport.text = if(AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture) == null) flightSchedule!!.airportCodeDeparture else AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.name
+        departureAirport.text = if (AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture) == null) flightSchedule!!.airportCodeDeparture else AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.name
         departureTime.text = flightSchedule!!.localTimeDeparture
         arrivalFlightNo.text = resources.getString(R.string.flight_no, flightSchedule!!.flightNumber)
-        arrivalAirport.text = if(AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival) == null) flightSchedule!!.airportCodeArrival else AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.name
+        arrivalAirport.text = if (AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival) == null) flightSchedule!!.airportCodeArrival else AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.name
         arrivalTime.text = flightSchedule!!.localTimeArrival
     }
 
@@ -177,19 +209,30 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
 
         val origin: City? = CityDao(this).getCity(flightSchedule!!.airportCodeDeparture)
         val destination: City? = CityDao(this).getCity(flightSchedule!!.airportCodeArrival)
+        val originAirport: Airport? = AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)
+        val destinationAirport: Airport? = AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)
 
         if (origin == null) {
             Toast.makeText(this, resources.getString(R.string.origin_location_unavailable), Toast.LENGTH_SHORT).show()
             return
         }
-
         if (destination == null) {
             Toast.makeText(this, resources.getString(R.string.dest_location_unavailable), Toast.LENGTH_SHORT).show()
             return
         }
+        if (originAirport == null) {
+            Toast.makeText(this, resources.getString(R.string.origin_location_unavailable), Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (destinationAirport == null) {
+            Toast.makeText(this, resources.getString(R.string.dest_location_unavailable), Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        val originLatLng = LatLng(origin.latitude.toDouble(), CityDao(this).getCity(flightSchedule!!.airportCodeDeparture)!!.longitude.toDouble())
-        val destLatLng = LatLng(destination.latitude.toDouble(), CityDao(this).getCity(flightSchedule!!.airportCodeArrival)!!.longitude.toDouble())
+        val originLatLng = LatLng(AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.latitude.toDouble(),
+                AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.longitude.toDouble())
+        val destLatLng = LatLng(AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.latitude.toDouble(),
+                AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.longitude.toDouble())
 
         // add origin marker
         googleMap!!.addMarker(MarkerOptions()
@@ -227,6 +270,16 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
             val padding = HelperFunctions.dpToPx(this, 30)
             val cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, width, height, padding)
             googleMap!!.animateCamera(cameraUpdate)
+        }
+    }
+
+    inner class CompleteAirportsSyncBroadcastReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+
+            if (progressDialog.isShowing) progressDialog.dismiss()
+            setData()
+            addTravelRoutePolyline()
         }
     }
 }

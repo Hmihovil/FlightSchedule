@@ -48,7 +48,11 @@ class AirportDao {
                 Log.d(TAG, "Airports Return JSON \n----------$jsonObject")
 
                 database!!.open().clear(Database.TABLE_AIRPORTS)
-                database!!.open().saveAirports(jsonObject.getJSONObject("AirportResource").getJSONObject("Airports").getJSONArray("Airport"))
+                if(airportCode.isEmpty()){
+                    database!!.open().saveAirports(jsonObject.getJSONObject("AirportResource").getJSONObject("Airports").getJSONArray("Airport"))
+                }else{
+                    database!!.open().insertAirport(jsonObject.getJSONObject("AirportResource").getJSONObject("Airports").getJSONObject("Airport"))
+                }
                 database!!.close()
 
                 context.sendBroadcast(Intent(Constants.Broadcast_COMPLETE_AIRPORTS_SYNC))
