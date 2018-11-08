@@ -12,4 +12,10 @@ Pre-requisites
 Installation
 ------------
 
-Compile and install application on a **mobile device only**(there are known issues with redirection of URLs on AVDs).
+- Replace Map Key in AndroidManifest.xml in value attribute for Maps to work in debug
+```
+<meta-data
+  android:name="com.google.android.maps.v2.API_KEY"
+  android:value="your_key_here" />
+```
+- Run app
