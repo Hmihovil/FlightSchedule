@@ -6,8 +6,12 @@ import android.graphics.Typeface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.IdRes
+import android.support.annotation.NonNull
+import android.support.constraint.ConstraintLayout
+import android.support.design.widget.BottomSheetBehavior
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import io.capsella.flightschedule.R
 import com.google.android.gms.maps.GoogleMap
@@ -15,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import io.capsella.flightschedule.dao.AirportDao
 import io.capsella.flightschedule.dao.FlightSceduleDao
 import io.capsella.flightschedule.model.FlightSchedule
 import io.capsella.flightschedule.util.Constants
@@ -28,6 +33,18 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
     private val TAG = MapActivity::class.java.simpleName
 
     private lateinit var backBtn: ImageView
+    private lateinit var chevron: ImageView
+    private lateinit var peekTitle: TextView
+    private lateinit var departureTitle: TextView
+    private lateinit var departureFlightNo: TextView
+    private lateinit var departureAirport: TextView
+    private lateinit var departureTime: TextView
+    private lateinit var arrivalTitle: TextView
+    private lateinit var arrivalFlightNo: TextView
+    private lateinit var arrivalAirport: TextView
+    private lateinit var arrivalTime: TextView
+    private lateinit var bottomSheetLayout: ConstraintLayout
+    private lateinit var sheetBehavior: BottomSheetBehavior<*>
 
     private lateinit var proximaNovaBold: Typeface
     private lateinit var proximaNovaSemiBold: Typeface
@@ -60,6 +77,15 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
                 finish()
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
             }
+            R.id.peek_title -> {
+                if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    chevron.setImageDrawable(resources.getDrawable(R.drawable.chevron_down))
+                } else {
+                    sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    chevron.setImageDrawable(resources.getDrawable(R.drawable.chevron_up))
+                }
+            }
         }
     }
 
@@ -83,14 +109,68 @@ class MapActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallbac
     private fun initViews() {
 
         backBtn = bind(R.id.back)
+        chevron = bind(R.id.chevron)
+        peekTitle = bind(R.id.peek_title)
+        departureTitle = bind(R.id.departure_title)
+        departureFlightNo = bind(R.id.departure_flight_no)
+        departureAirport = bind(R.id.departure_airport)
+        departureTime = bind(R.id.departure_time)
+        arrivalTitle = bind(R.id.arrival_title)
+        arrivalFlightNo = bind(R.id.arrival_flight_no)
+        arrivalAirport = bind(R.id.arrival_airport)
+        arrivalTime = bind(R.id.arrival_time)
+        bottomSheetLayout = bind(R.id.bottom_sheet_layout)
+        sheetBehavior = BottomSheetBehavior.from(bottomSheetLayout)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
 
+        peekTitle.typeface = proximaNovaSemiBold
+        departureTitle.typeface = proximaNovaRegular
+        departureFlightNo.typeface = proximaNovaRegular
+        departureAirport.typeface = proximaNovaRegular
+        departureTime.typeface = proximaNovaRegular
+        arrivalTitle.typeface = proximaNovaRegular
+        arrivalFlightNo.typeface = proximaNovaRegular
+        arrivalAirport.typeface = proximaNovaRegular
+        arrivalTime.typeface = proximaNovaRegular
+
         backBtn.setOnClickListener(this)
+        peekTitle.setOnClickListener(this)
+
+        sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        chevron.setImageDrawable(resources.getDrawable(R.drawable.chevron_down))
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        chevron.setImageDrawable(resources.getDrawable(R.drawable.chevron_up))
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
+            }
+
+            override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
     }
 
     private fun setData() {
         flightSchedule = FlightSceduleDao(this).getFlightSchedule(intent.getIntExtra(Constants.ID, 0))
+
+        departureFlightNo.text = resources.getString(R.string.flight_no, flightSchedule!!.flightNumber)
+        departureAirport.text = AirportDao(this).getAirport(flightSchedule!!.airportCodeDeparture)!!.name
+        departureTime.text = flightSchedule!!.localTimeDeparture
+        arrivalFlightNo.text = resources.getString(R.string.flight_no, flightSchedule!!.flightNumber)
+        arrivalAirport.text = AirportDao(this).getAirport(flightSchedule!!.airportCodeArrival)!!.name
+        arrivalTime.text = flightSchedule!!.localTimeArrival
     }
 
     private fun addTravelRoutePolyline() {

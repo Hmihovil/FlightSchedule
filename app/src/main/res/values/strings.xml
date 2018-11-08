@@ -22,5 +22,8 @@
     <string name="flight_no">FN# %s</string>
     <string name="origin_location_unavailable">Departure airport location unavailable</string>
     <string name="dest_location_unavailable">Arrival airport location unavailable</string>
+    <string name="flight_schedule_details">Flight Schedule Details</string>
+    <string name="departure">Departure</string>
+    <string name="arrival">Arrival</string>
 
 </resources>

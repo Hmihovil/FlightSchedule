@@ -4,7 +4,7 @@ class Constants {
     companion object {
 
         // General
-        const val AUTHORIZATION = "Bearer cny7dfy4ww8cbregkfnbnctw"
+        const val AUTHORIZATION = "Bearer pz4gen6scrmmu3hfkd5vxyhh"
         const val ID = "id"
         const val ORIGIN = "origin"
         const val DESTINATION = "destination"

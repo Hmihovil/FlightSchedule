@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:clickable="true"
+    android:descendantFocusability="blocksDescendants"
+    app:behavior_peekHeight="60dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/chevron"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="22.5dp"
+            android:src="@drawable/chevron_up"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/peek_title"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:text="@string/flight_schedule_details"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="0.25dp"
+            android:background="@color/dddddd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/peek_title" />
+
+        <ImageView
+            android:id="@+id/departure_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:src="@drawable/departure"
+            app:layout_constraintEnd_toStartOf="@+id/departure_title"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+        <TextView
+            android:id="@+id/departure_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/departure"
+            android:textColor="@color/nines"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/departure_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/departure_img"
+            app:layout_constraintTop_toTopOf="@+id/departure_img" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="0dp"
+            android:layout_height="0.25dp"
+            android:background="@color/dddddd"
+            app:layout_constraintEnd_toEndOf="@+id/departure_title"
+            app:layout_constraintStart_toStartOf="@+id/departure_img"
+            app:layout_constraintTop_toBottomOf="@+id/departure_img" />
+
+        <TextView
+            android:id="@+id/departure_flight_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="Flight #12345"
+            android:textColor="@color/sevens"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+        <TextView
+            android:id="@+id/departure_airport"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="Kotoka International Airport"
+            android:textColor="@color/sevens"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/departure_flight_no" />
+
+        <TextView
+            android:id="@+id/departure_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="2018-12-4T12:35"
+            android:textColor="@color/sevens"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/departure_airport" />
+
+        <ImageView
+            android:id="@+id/arrival_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:padding="5dp"
+            android:src="@drawable/arrival"
+            app:layout_constraintEnd_toStartOf="@+id/arrival_title"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/departure_time" />
+
+        <TextView
+            android:id="@+id/arrival_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/arrival"
+            android:textColor="@color/nines"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/arrival_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/arrival_img"
+            app:layout_constraintTop_toTopOf="@+id/arrival_img" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="0.25dp"
+            android:background="@color/dddddd"
+            app:layout_constraintEnd_toEndOf="@+id/arrival_title"
+            app:layout_constraintStart_toStartOf="@+id/arrival_img"
+            app:layout_constraintTop_toBottomOf="@+id/arrival_img" />
+
+        <TextView
+            android:id="@+id/arrival_flight_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="Flight #12345"
+            android:textColor="@color/sevens"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <TextView
+            android:id="@+id/arrival_airport"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="Kotoka International Airport"
+            android:textColor="@color/sevens"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrival_flight_no" />
+
+        <TextView
+            android:id="@+id/arrival_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="2018-12-4T12:35"
+            android:textColor="@color/sevens"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrival_airport" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
